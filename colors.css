@@ -1,0 +1,15 @@
+:root {
+    /* Color Palette (assumed from names like 'text', 'accent') */
+    --color-text: #333;
+    --color-headers: #111;
+    --color-accent: #d9534f;
+    --color-link: #0275d8;
+    --color-link-visited: #5a3a8a;
+    --color-link-hover: #014c8c;
+    --color-border: #ddd;
+    --color-disabled: #777;
+    --color-bg-light: #f9f9f9;
+
+    /* Content Size Variable */
+    --content-size: 1100px;
+}

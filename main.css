@@ -1,0 +1,85 @@
+body main {
+    max-width: 80rem;
+    display: grid;
+}
+
+.header {
+    align-items: baseline;
+
+    .column {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 1em;
+
+        button {
+            font-size: 1rem;
+            line-height: 1rem;
+            cursor: pointer;
+            height: 2rem;
+            width: 2rem;
+            align-self: end;
+            justify-self: end;
+        }
+    }
+
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-rows: 1rem repeat(auto-fit, minmax(auto, auto));
+    gap: 2em;
+    align-items: start;
+    /* Align items to the top of each grid area */
+    justify-items: stretch;
+    /* Stretch columns to fill the grid area */
+}
+
+.column {
+    /* This uses Grid to align the items within the column */
+    display: grid;
+    /* The rows are for the h2, the ul, and the button */
+    grid-template-rows: auto 1fr auto;
+}
+
+.column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.column li {
+    background-color: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 1em;
+    margin-bottom: 1em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.column li p {
+    margin: 0;
+}
+
+.video-preview img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-bottom: 0.5em;
+}
+
+.video-preview p {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.link-preview {
+    font-size: 0.95rem;
+}
+
+.link-preview .link-url {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-disabled);
+    margin-top: 0.25em;
+    word-break: break-all;
+}
