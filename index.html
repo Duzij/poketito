@@ -13,70 +13,38 @@
             href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i"
             rel="stylesheet"
         >
-       <script src="./index.js" defer></script>
+        <script src="./index.js" defer></script>
     </head>
     <body>
         <main>
-            <div class="container header">
-                <div class="column">
-                    <h2>Notes</h2>
-                    <button id="add-note" title="Add New Note">+</button>
-                </div>
-                <div class="column">
-                    <h2>Videos</h2>
-                    <button id="add-video" title="Add New Video">+</button>
-                </div>
-                <div class="column">
-                    <h2>Links</h2>
-                    <button id="add-link" title="Add New Link">+</button>
-                </div>
-            </div>
             <div class="container">
                 <div class="column">
+                    <div class="header">
+                        <h2>Notes</h2>
+                        <button id="add-note" title="Add New Note">+</button>
+                    </div>
                     <ul id="notes-list">
-                        <li>
-                            <p>
-                                This is a sample note. It's a good place for
-                                reminders and thoughts.
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                Remember to buy groceries: milk, bread, and
-                                eggs.
-                            </p>
-                        </li>
                     </ul>
                 </div>
 
                 <div class="column">
+                    <div class="header">
+                        <h2>Videos</h2>
+                        <button id="add-video" title="Add New Video">+</button>
+                    </div>
                     <ul id="videos-list">
-                        <li class="video-preview">
-                            <img
-                                src="https://placehold.co/600x400/d9534f/ffffff?text=Video+Thumbnail"
-                                alt="Video thumbnail"
-                            >
-                            <p>A great video I want to watch later</p>
-                        </li>
                     </ul>
                 </div>
 
                 <div class="column">
+                    <div class="header">
+                        <h2>Links</h2>
+                        <button id="add-link" title="Add New Link">+</button>
+                    </div>
                     <ul id="links-list">
-                        <li class="link-preview">
-                            <a href="#"
-                            >An interesting article about web design</a>
-                            <span class="link-url"
-                            >https://example.com/article</span>
-                        </li>
-                        <li class="link-preview">
-                            <a href="#">Helpful CSS Tricks and Tutorials</a>
-                            <span class="link-url">https://css-tricks.com</span>
-                        </li>
                     </ul>
                 </div>
             </div>
         </main>
-
     </body>
 </html>

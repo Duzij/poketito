@@ -6,7 +6,6 @@ body main {
 .header {
     align-items: baseline;
 
-    .column {
         display: grid;
         grid-template-columns: auto auto;
         gap: 1em;
@@ -19,7 +18,6 @@ body main {
             width: 2rem;
             align-self: end;
             justify-self: end;
-        }
     }
 
 }
@@ -28,7 +26,7 @@ body main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     grid-template-rows: 1rem repeat(auto-fit, minmax(auto, auto));
-    gap: 2em;
+    gap: 1em;
     align-items: start;
     /* Align items to the top of each grid area */
     justify-items: stretch;
@@ -40,12 +38,15 @@ body main {
     display: grid;
     /* The rows are for the h2, the ul, and the button */
     grid-template-rows: auto 1fr auto;
+    gap: 1em;
 }
 
 .column ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: grid;
+    gap: 1em;
 }
 
 .column li {
@@ -53,7 +54,6 @@ body main {
     border: 1px solid var(--color-border);
     border-radius: 4px;
     padding: 1em;
-    margin-bottom: 1em;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
