@@ -80,8 +80,9 @@ class GridEditor {
     handleDrag(e) {
         if (!this.isDragging) return;
 
+        this.numberOfColumns = this.container.children.length;
         const deltaX = e.clientX - this.initialX;
-        const columnWidth = this.container.getBoundingClientRect().width / 12;
+        const columnWidth = this.container.getBoundingClientRect().width / this.numberOfColumns;
         const shift = Math.round(deltaX / columnWidth);
 
         if (shift !== 0) {
@@ -102,9 +103,9 @@ class GridEditor {
 
         const deltaX = e.clientX - this.initialX;
         const containerWidth = this.container.getBoundingClientRect().width;
-        const columnWidth = containerWidth / 12;
+        const columnWidth = containerWidth / this.container.children.length;
         const currentWidth = this.initialWidth + deltaX;
-        const columns = Math.max(1, Math.min(12, Math.round(currentWidth / columnWidth)));
+        const columns = Math.max(1, Math.min(this.container.children.length, Math.round(currentWidth / columnWidth)));
 
         this.currentColumn.style.gridColumn = `span ${columns}`;
     }

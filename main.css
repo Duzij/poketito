@@ -1,6 +1,6 @@
 body main {
-    max-height: 100rem;
     display: grid;
+    scroll-behavior: auto;
 }
 
 #edit-mode {
@@ -15,17 +15,9 @@ body main {
     right: 1rem;
 }
 
-.add {
-    border-radius: 50%;
-    background-color: var(--color-primary);
-    color: black;
-    border: none;
-    cursor: pointer;
-}
-
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 15rem));
     grid-template-rows: 1rem repeat(auto-fit, minmax(auto, auto));
     align-items: start;
     justify-items: stretch;
@@ -33,15 +25,65 @@ body main {
     margin: 0 auto;
     width: 100%;
     min-height: 100vh;
-}
-
-/* Edit mode grid */
-.container.edit-mode {
     background-image: radial-gradient(circle at 0 0, var(--color-border) 1px, transparent 1px);
     background-size: 2rem 2rem;
+    overflow-x: scroll;
 }
 
-/* Edit mode column styles */
+.column li {
+    background-color: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    min-height: 2rem;
+
+    div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .note-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    button {
+        font-size: 1rem;
+        line-height: 1rem;
+        cursor: pointer;
+        height: 2rem;
+        width: 2rem;
+        align-self: center;
+    }
+
+    button.add {
+        background-color: transparent;
+        color: var(--color-border);
+        border: none;
+        border-radius: 4px;
+        padding: 0.5rem 0rem;
+        width: auto;
+    }
+
+    button.delete {
+        background-color: transparent;
+        color: var(--color-border);
+        border: 1px solid var(--color-border);
+        border-radius: 50%;
+        font-size: 1.2rem;
+        padding: 0;
+        
+        &:hover {
+            background-color: #ff4444;
+            color: white;
+            border-color: #ff4444;
+        }
+    }
+}
+
 .edit-mode .column {
     background: var(--color-bg-light);
     border: 1px solid var(--color-border);
@@ -76,34 +118,8 @@ body main {
 }
 
 .edit-mode .column.dragging {
+    cursor: grabbing;
     opacity: 0.6;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.column ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-}
-
-.column li {
-    background-color: var(--color-bg-light);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-    min-height: 2rem;
-    display: grid;
-
-    button {
-        font-size: 1rem;
-        line-height: 1rem;
-        cursor: pointer;
-        height: 2rem;
-        width: 2rem;
-        align-self: center;
-        justify-self: center;
-    }
 }

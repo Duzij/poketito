@@ -7,23 +7,55 @@ document.addEventListener(
             return 'add-note-' + Math.random().toString(36).substr(2, 9);
         }
 
-        // Function to create a new column
-        function createColumn(notes = []) {
+        function createColumn(title, items = []) {
             const column = document.createElement("div");
             column.className = "column";
             
             const list = document.createElement("ul");
 
-            // Add existing notes to the list
-            notes.forEach(note => {
+            //add title to front
+            if (title) {
+                items = items.unshift({content: title});
+            }
+
+            // Create first note with delete button
+            const firstItem = document.createElement("li");
+            const firstNoteDiv = document.createElement("div");
+            const firstNoteContent = document.createElement("div");
+            firstNoteContent.className = "note-content";
+            
+            // Add delete button
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete";
+            deleteButton.title = "Delete Column";
+            deleteButton.textContent = "×";
+            deleteButton.addEventListener("click", () => {
+                if (confirm("Are you sure you want to delete this column?")) {
+                    column.remove();
+                    saveData();
+                }
+            });
+            
+            // Add note content
+            const p = document.createElement("p");
+            p.textContent = items.length > 0 ? items[0].content : "New Column";
+            firstNoteContent.appendChild(p);
+            
+            firstNoteDiv.appendChild(firstNoteContent);
+            firstNoteDiv.appendChild(deleteButton);
+            firstItem.appendChild(firstNoteDiv);
+            list.appendChild(firstItem);
+            
+            // Add remaining notes to the list
+            for (let i = 1; i < items.length; i++) {
                 const listItem = document.createElement("li");
                 const noteDiv = document.createElement("div");
                 const p = document.createElement("p");
-                p.textContent = note.content;
+                p.textContent = items[i].content;
                 noteDiv.appendChild(p);
                 listItem.appendChild(noteDiv);
                 list.appendChild(listItem);
-            });
+            }
 
             // Create add button list item
             const addButtonLi = document.createElement("li");
@@ -32,7 +64,7 @@ document.addEventListener(
             addButton.id = buttonId;
             addButton.className = "add";
             addButton.title = "Add New Note";
-            addButton.textContent = "+";
+            addButton.textContent = "+ Add Note";
             addButtonLi.appendChild(addButton);
             list.appendChild(addButtonLi);
             
@@ -65,7 +97,9 @@ document.addEventListener(
         const addColumnBtn = document.getElementById("add-column");
 
         addColumnBtn.addEventListener("click", () => {
-            const newColumn = createColumn();
+            //Ask for a first item, that will be a header
+            const headerText = prompt("Enter header text:", "New Column");
+            const newColumn = createColumn(headerText);
             const container = document.querySelector('.container');
             container.appendChild(newColumn);
             saveData();
