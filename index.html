@@ -6,7 +6,8 @@
         <title>3-Column Layout</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="./awsm.min.css" rel="stylesheet">
+        <!-- <link href="./awsm.min.css" rel="stylesheet"> -->
+        <link href="./reset.css" rel="stylesheet">
         <link href="./colors.css" rel="stylesheet">
         <link href="./main.css" rel="stylesheet">
         <link
@@ -14,37 +15,26 @@
             rel="stylesheet"
         >
         <script src="./index.js" defer></script>
+        <script src="./grid-editor.js" defer></script>
     </head>
     <body>
         <main>
             <div class="container">
                 <div class="column">
-                    <div class="header">
-                        <h2>Notes</h2>
-                        <button id="add-note" title="Add New Note">+</button>
-                    </div>
-                    <ul id="notes-list">
+                    <ul>
+                        <li>
+                            <div>
+                                <p>Test</p>
+                            </div>
+                        </li>
+                        <li>
+                            <button id="add-1" class="add" title="Add New Note">+</button>
+                        </li>
                     </ul>
-                </div>
-
-                <div class="column">
-                    <div class="header">
-                        <h2>Videos</h2>
-                        <button id="add-video" title="Add New Video">+</button>
-                    </div>
-                    <ul id="videos-list">
-                    </ul>
-                </div>
-
-                <div class="column">
-                    <div class="header">
-                        <h2>Links</h2>
-                        <button id="add-link" title="Add New Link">+</button>
-                    </div>
-                    <ul id="links-list">
-                    </ul>
-                </div>
+                </div> 
             </div>
+            <button id="add-column" class="add" title="Add new column">+</button>
+            <button id="edit-mode" title="Edit Mode">Edit Layout</button>
         </main>
     </body>
 </html>

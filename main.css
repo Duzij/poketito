@@ -1,44 +1,84 @@
 body main {
-    max-width: 80rem;
+    max-height: 100rem;
     display: grid;
 }
 
-.header {
-    align-items: baseline;
+#edit-mode {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+}
 
-        display: grid;
-        grid-template-columns: auto auto;
-        gap: 1em;
+#add-column {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
 
-        button {
-            font-size: 1rem;
-            line-height: 1rem;
-            cursor: pointer;
-            height: 2rem;
-            width: 2rem;
-            align-self: end;
-            justify-self: end;
-    }
-
+.add {
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: black;
+    border: none;
+    cursor: pointer;
 }
 
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
     grid-template-rows: 1rem repeat(auto-fit, minmax(auto, auto));
-    gap: 1em;
     align-items: start;
-    /* Align items to the top of each grid area */
     justify-items: stretch;
-    /* Stretch columns to fill the grid area */
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 100vh;
 }
 
-.column {
-    /* This uses Grid to align the items within the column */
-    display: grid;
-    /* The rows are for the h2, the ul, and the button */
-    grid-template-rows: auto 1fr auto;
-    gap: 1em;
+/* Edit mode grid */
+.container.edit-mode {
+    background-image: radial-gradient(circle at 0 0, var(--color-border) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+}
+
+/* Edit mode column styles */
+.edit-mode .column {
+    background: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    cursor: move;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.edit-mode .column:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit-mode .column::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    cursor: col-resize;
+    background: transparent;
+}
+
+.edit-mode .column:hover::before {
+    background: var(--color-border);
+    opacity: 0.5;
+}
+
+.edit-mode .column.resizing {
+    user-select: none;
+    opacity: 0.8;
+}
+
+.edit-mode .column.dragging {
+    opacity: 0.6;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .column ul {
@@ -46,40 +86,24 @@ body main {
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 1em;
 }
 
 .column li {
     background-color: var(--color-bg-light);
     border: 1px solid var(--color-border);
     border-radius: 4px;
-    padding: 1em;
+    padding: 1rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-}
+    min-height: 2rem;
+    display: grid;
 
-.column li p {
-    margin: 0;
-}
-
-.video-preview img {
-    max-width: 100%;
-    border-radius: 4px;
-    margin-bottom: 0.5em;
-}
-
-.video-preview p {
-    font-weight: bold;
-    font-size: 0.95rem;
-}
-
-.link-preview {
-    font-size: 0.95rem;
-}
-
-.link-preview .link-url {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--color-disabled);
-    margin-top: 0.25em;
-    word-break: break-all;
+    button {
+        font-size: 1rem;
+        line-height: 1rem;
+        cursor: pointer;
+        height: 2rem;
+        width: 2rem;
+        align-self: center;
+        justify-self: center;
+    }
 }
