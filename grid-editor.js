@@ -130,15 +130,19 @@ class GridEditor {
 
         const deltaX = e.clientX - this.initialX;
         const baseRemInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        const deltaRems = Math.round(deltaX / baseRemInPixels);
         
-        // Get current span
-        const currentSpan = parseInt(this.currentColumn.style.gridColumn.split(' ')[1]) || 10;
-        // Calculate new span based on delta
-        const newSpan = Math.max(1, currentSpan + deltaRems);
-        
-        this.currentColumn.style.gridColumn = `span ${newSpan}`;
-        this.initialX = e.clientX; // Reset initial X to allow for continuous resizing
+        if (Math.abs(deltaX) > baseRemInPixels) {
+
+            const deltaRems = Math.round(deltaX / baseRemInPixels);
+            console.log("deltaRems", deltaRems);
+            // Get current span
+            const currentSpan = parseInt(this.currentColumn.style.gridColumn.split(' ')[1]) || 10;
+            
+            const newSpan = Math.max(1, currentSpan + (deltaRems > 0 ? 1 : -1));
+            this.currentColumn.spanSize = newSpan;
+            this.currentColumn.style.gridColumn = `span ${newSpan}`;
+            this.initialX = e.clientX; // Reset initial X to allow for continuous resizing
+        }
     }
 
     stopDraggingOrResizing() {
