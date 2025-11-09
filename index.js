@@ -94,7 +94,7 @@ document.addEventListener(
             container.appendChild(defaultColumn);
         }
 
-        const addColumnBtn = document.getElementById("add-column");
+        const addColumnBtn = document.getElementById("add-column-button");
 
         addColumnBtn.addEventListener("click", () => {
             //Ask for a first item, that will be a header

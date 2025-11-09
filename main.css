@@ -1,24 +1,28 @@
+:root {
+    --base-rem: 1rem;
+}
+
 body main {
     display: grid;
     scroll-behavior: auto;
 }
 
-#edit-mode {
+#edit-mode-button {
     position: fixed;
-    bottom: 1rem;
-    left: 1rem;
+    bottom: calc(var(--base-rem));
+    left: calc(var(--base-rem));
 }
 
-#add-column {
+#add-column-button {
     position: fixed;
-    bottom: 1rem;
-    right: 1rem;
+    bottom: calc(var(--base-rem));
+    right: calc(var(--base-rem));
 }
 
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 15rem));
-    grid-template-rows: 1rem repeat(auto-fit, minmax(auto, auto));
+    grid-template-columns: repeat(auto-fit, minmax(calc(10 * var(--base-rem)), calc(15 * var(--base-rem))));
+    grid-template-rows: calc(var(--base-rem)) repeat(auto-fit, minmax(auto, auto));
     align-items: start;
     justify-items: stretch;
     position: relative;
@@ -26,35 +30,35 @@ body main {
     width: 100%;
     min-height: 100vh;
     background-image: radial-gradient(circle at 0 0, var(--color-border) 1px, transparent 1px);
-    background-size: 1rem 1rem;
+    background-size: calc(var(--base-rem)) calc(var(--base-rem));
     overflow-x: scroll;
 }
 
 .column li {
     background-color: var(--color-bg-light);
-    margin: 1rem;
+    margin: calc(var(--base-rem));
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-    min-height: 2rem;
+    min-height: calc(2 * var(--base-rem));
     background: #ff4444;
 
     &:first-child {
         margin-bottom: 0;
-        border-top-left-radius: .5rem;
-        border-top-right-radius: .5rem;
+        border-top-left-radius: calc(0.5 * var(--base-rem));
+        border-top-right-radius: calc(0.5 * var(--base-rem));
     }
 
     &:last-child {
         margin-top: 0;
-        border-bottom-right-radius: .5rem;
-        border-bottom-left-radius: .5rem;
+        border-bottom-right-radius: calc(0.5 * var(--base-rem));
+        border-bottom-left-radius: calc(0.5 * var(--base-rem));
     }
 
     div {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 1rem;
-        padding: .5rem;
+        gap: calc(var(--base-rem));
+        padding: calc(0.5 * var(--base-rem));
     }
 
     .note-content {
@@ -63,11 +67,11 @@ body main {
     }
 
     button {
-        font-size: 1rem;
-        line-height: 1rem;
+        font-size: calc(var(--base-rem));
+        line-height: calc(var(--base-rem));
         cursor: pointer;
-        height: 2rem;
-        width: 2rem;
+        height: calc(2 * var(--base-rem));
+        width: calc(2 * var(--base-rem));
         align-self: center;
     }
 
@@ -76,9 +80,9 @@ body main {
         color: var(--color-border);
         border: none;
         border-radius: 4px;
-        padding: 0.5rem 0rem;
+        padding: calc(0.5 * var(--base-rem)) 0;
         width: auto;
-        padding: .5rem;
+        padding: calc(0.5 * var(--base-rem));
     }
 
     button.delete {
@@ -86,7 +90,7 @@ body main {
         color: var(--color-border);
         border: 1px solid var(--color-border);
         border-radius: 50%;
-        font-size: 1.2rem;
+        font-size: var(--base-rem);
         padding: 0;
         
         &:hover {

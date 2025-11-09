@@ -1,7 +1,7 @@
 class GridEditor {
     constructor() {
         this.container = document.querySelector('.container');
-        this.editModeToggle = document.getElementById('edit-mode');
+        this.editModeToggle = document.getElementById('edit-mode-button');
 
         this.isEditMode = false;
         this.isDragging = false;
@@ -28,7 +28,7 @@ class GridEditor {
             // Check if clicking resize handle
             const rect = column.getBoundingClientRect();
             const isResizeHandle = (e.clientX > rect.right - 10);
-
+            console.log("isResizeHandle", isResizeHandle);
             if (isResizeHandle) {
                 this.startResizing(e, column);
             } else {
