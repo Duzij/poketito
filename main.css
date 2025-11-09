@@ -26,23 +26,35 @@ body main {
     width: 100%;
     min-height: 100vh;
     background-image: radial-gradient(circle at 0 0, var(--color-border) 1px, transparent 1px);
-    background-size: 2rem 2rem;
+    background-size: 1rem 1rem;
     overflow-x: scroll;
 }
 
 .column li {
     background-color: var(--color-bg-light);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 1rem;
+    margin: 1rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     min-height: 2rem;
+    background: #ff4444;
+
+    &:first-child {
+        margin-bottom: 0;
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+    }
+
+    &:last-child {
+        margin-top: 0;
+        border-bottom-right-radius: .5rem;
+        border-bottom-left-radius: .5rem;
+    }
 
     div {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
+        padding: .5rem;
     }
 
     .note-content {
@@ -66,6 +78,7 @@ body main {
         border-radius: 4px;
         padding: 0.5rem 0rem;
         width: auto;
+        padding: .5rem;
     }
 
     button.delete {
