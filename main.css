@@ -1,8 +1,10 @@
 :root {
     --base-rem: 1rem;
+    --base-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
 body main {
+    font-family: var(--base-font);
     display: grid;
     scroll-behavior: auto;
 }
@@ -21,7 +23,7 @@ body main {
 
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(calc(10 * var(--base-rem)), calc(15 * var(--base-rem))));
+    grid-template-columns: repeat(auto-fill, var(--base-rem));
     grid-template-rows: calc(var(--base-rem)) repeat(auto-fit, minmax(auto, auto));
     align-items: start;
     justify-items: stretch;
@@ -34,9 +36,20 @@ body main {
     overflow-x: scroll;
 }
 
+.column {
+    &:first-child {
+        margin-right: 0;
+    }
+
+    &:last-child {
+        margin-left: 0;
+    }
+}
+
 .column li {
     background-color: var(--color-bg-light);
-    margin: calc(var(--base-rem));
+    margin-top: var(--base-rem);
+    margin-left: calc(var(--base-rem));
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     min-height: calc(2 * var(--base-rem));
     background: #ff4444;
@@ -92,7 +105,7 @@ body main {
         border-radius: 50%;
         font-size: var(--base-rem);
         padding: 0;
-        
+
         &:hover {
             background-color: #ff4444;
             color: white;

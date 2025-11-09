@@ -102,12 +102,16 @@ class GridEditor {
         if (!this.isResizing) return;
 
         const deltaX = e.clientX - this.initialX;
-        const containerWidth = this.container.getBoundingClientRect().width;
-        const columnWidth = containerWidth / this.container.children.length;
-        const currentWidth = this.initialWidth + deltaX;
-        const columns = Math.max(1, Math.min(this.container.children.length, Math.round(currentWidth / columnWidth)));
-
-        this.currentColumn.style.gridColumn = `span ${columns}`;
+        const baseRemInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const deltaRems = Math.round(deltaX / baseRemInPixels);
+        
+        // Get current span
+        const currentSpan = parseInt(this.currentColumn.style.gridColumn.split(' ')[1]) || 10;
+        // Calculate new span based on delta
+        const newSpan = Math.max(1, currentSpan + deltaRems);
+        
+        this.currentColumn.style.gridColumn = `span ${newSpan}`;
+        this.initialX = e.clientX; // Reset initial X to allow for continuous resizing
     }
 
     stopDraggingOrResizing() {
@@ -140,23 +144,32 @@ class GridEditor {
 
     loadConfiguration() {
         const savedConfig = localStorage.getItem('gridConfiguration');
-        if (!savedConfig) return;
-
-        try {
-            this.columnConfig = JSON.parse(savedConfig);
-            const columns = this.container.querySelectorAll('.column');
-            
-            columns.forEach((column, index) => {
-                if (this.columnConfig[index]) {
-                    const { span } = this.columnConfig[index];
-                    if (span > 1) {
+        const columns = this.container.querySelectorAll('.column');
+        
+        if (savedConfig) {
+            try {
+                this.columnConfig = JSON.parse(savedConfig);
+                columns.forEach((column, index) => {
+                    if (this.columnConfig[index]) {
+                        const { span } = this.columnConfig[index];
                         column.style.gridColumn = `span ${span}`;
+                    } else {
+                        column.style.gridColumn = 'span 10'; // Default span
                     }
-                }
-            });
-        } catch (error) {
-            console.error('Error loading grid configuration:', error);
+                });
+            } catch (error) {
+                console.error('Error loading grid configuration:', error);
+                this.setDefaultColumnSpans(columns);
+            }
+        } else {
+            this.setDefaultColumnSpans(columns);
         }
+    }
+
+    setDefaultColumnSpans(columns) {
+        columns.forEach(column => {
+            column.style.gridColumn = 'span 10'; // Default span
+        });
     }
 }
 

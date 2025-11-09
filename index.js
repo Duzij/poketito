@@ -10,6 +10,7 @@ document.addEventListener(
         function createColumn(title, items = []) {
             const column = document.createElement("div");
             column.className = "column";
+            column.style.gridColumn = "span 10"; // Default span
             
             const list = document.createElement("ul");
 
