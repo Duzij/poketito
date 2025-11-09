@@ -1,4 +1,6 @@
 class GridEditor {
+    static DEFAULT_COLUMN_SPAN = 10;
+
     constructor() {
         this.container = document.querySelector('.container');
         this.editModeToggle = document.getElementById('edit-mode-button');
@@ -19,11 +21,11 @@ class GridEditor {
 
     setupEventListeners() {
         this.editModeToggle.addEventListener('click', () => this.toggleEditMode());
-        
+
         // Setup column event listeners when edit mode is enabled
         this.container.addEventListener('mousedown', (e) => {
             if (!this.isEditMode) return;
-            
+
             const column = e.target.closest('.column');
             if (!column) return;
 
@@ -69,24 +71,24 @@ class GridEditor {
         this.currentColumn = column;
         this.initialX = e.clientX;
         column.classList.add('dragging');
-        
+
         // Create ghost element
         this.ghostElement = column.cloneNode(true);
         this.ghostElement.classList.add('ghost-column');
         this.ghostElement.style.width = `${column.offsetWidth}px`;
         this.ghostElement.style.height = `${column.offsetHeight}px`;
-        
+
         // Calculate offset from mouse to column edge
         const columnRect = column.getBoundingClientRect();
         this.dragOffset = {
             x: e.clientX - columnRect.left,
             y: e.clientY - columnRect.top
         };
-        
+
         // Position ghost element
         this.ghostElement.style.left = `${e.pageX - this.dragOffset.x}px`;
         this.ghostElement.style.top = `${e.pageY - this.dragOffset.y}px`;
-        
+
         document.body.appendChild(this.ghostElement);
     }
 
@@ -100,7 +102,7 @@ class GridEditor {
 
     handleDrag(e) {
         if (!this.isDragging) return;
-        
+
         // Update ghost element position
         if (this.ghostElement) {
             this.ghostElement.style.left = `${e.pageX - this.dragOffset.x}px`;
@@ -130,14 +132,14 @@ class GridEditor {
 
         const deltaX = e.clientX - this.initialX;
         const baseRemInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        
+
         if (Math.abs(deltaX) > baseRemInPixels) {
 
             const deltaRems = Math.round(deltaX / baseRemInPixels);
             console.log("deltaRems", deltaRems);
             // Get current span
-            const currentSpan = parseInt(this.currentColumn.style.gridColumn.split(' ')[1]) || 10;
-            
+            const currentSpan = parseInt(this.currentColumn.style.gridColumn.split(' ')[1]) || GridEditor.DEFAULT_COLUMN_SPAN;
+
             const newSpan = Math.max(1, currentSpan + (deltaRems > 0 ? 1 : -1));
             this.currentColumn.spanSize = newSpan;
             this.currentColumn.style.gridColumn = `span ${newSpan}`;
@@ -149,13 +151,13 @@ class GridEditor {
         if (this.currentColumn) {
             this.currentColumn.classList.remove('dragging', 'resizing');
         }
-        
+
         // Remove ghost element
         if (this.ghostElement) {
             this.ghostElement.remove();
             this.ghostElement = null;
         }
-        
+
         this.isDragging = false;
         this.isResizing = false;
         this.currentColumn = null;
@@ -164,12 +166,12 @@ class GridEditor {
     saveConfiguration() {
         const config = {};
         const columns = this.container.querySelectorAll('.column');
-        
+
         columns.forEach((column, index) => {
-            const columnSpan = column.style.gridColumn ? 
-                parseInt(column.style.gridColumn.split(' ')[1]) : 
+            const columnSpan = column.style.gridColumn ?
+                parseInt(column.style.gridColumn.split(' ')[1]) :
                 1;
-            
+
             config[index] = {
                 order: index,
                 span: columnSpan
@@ -183,7 +185,7 @@ class GridEditor {
     loadConfiguration() {
         const savedConfig = localStorage.getItem('gridConfiguration');
         const columns = this.container.querySelectorAll('.column');
-        
+
         if (savedConfig) {
             try {
                 this.columnConfig = JSON.parse(savedConfig);
@@ -192,7 +194,7 @@ class GridEditor {
                         const { span } = this.columnConfig[index];
                         column.style.gridColumn = `span ${span}`;
                     } else {
-                        column.style.gridColumn = 'span 10'; // Default span
+                        column.style.gridColumn = 'span ' + GridEditor.DEFAULT_COLUMN_SPAN.toString(); // Default span
                     }
                 });
             } catch (error) {
@@ -206,12 +208,11 @@ class GridEditor {
 
     setDefaultColumnSpans(columns) {
         columns.forEach(column => {
-            column.style.gridColumn = 'span 10'; // Default span
+            column.style.gridColumn = 'span ' + GridEditor.DEFAULT_COLUMN_SPAN.toString(); // Default span
         });
     }
 }
 
-// Initialize the grid editor when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new GridEditor();
 });

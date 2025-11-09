@@ -10,13 +10,14 @@ document.addEventListener(
         function createColumn(title, items = []) {
             const column = document.createElement("div");
             column.className = "column";
-            column.style.gridColumn = "span 10"; // Default span
+            column.style.gridColumn = "span " + GridEditor.DEFAULT_COLUMN_SPAN;
             
             const list = document.createElement("ul");
 
-            //add title to front
-            if (title) {
-                items = items.unshift({content: title});
+            // Handle title as the first item
+            const hasTitle = title && (!items.length || items[0].content !== title);
+            if (hasTitle) {
+                items.unshift({content: title, isTitle: true});
             }
 
             // Create first note with delete button
@@ -123,8 +124,13 @@ document.addEventListener(
                     });
                 }
                 
+                // Get title from the first note
+                const title = notes.length > 0 ? notes[0].content : '';
+                const regularNotes = notes.slice(1);
+                
                 columnsData.push({
-                    notes: notes,
+                    title: title,
+                    notes: regularNotes,
                     buttonId: column.querySelector('button').id
                 });
             });
@@ -134,6 +140,7 @@ document.addEventListener(
 
         // Function to load data from localStorage and display it
         function loadData() {
+            console.log("Loading data...");
             const savedData = localStorage.getItem('columnsData');
             if (savedData) {
                 const columnsData = JSON.parse(savedData);
@@ -143,7 +150,8 @@ document.addEventListener(
                 container.querySelectorAll('.column').forEach(col => col.remove());
 
                 columnsData.forEach(columnData => {
-                    const newCol = createColumn(columnData.notes);
+                    console.log("Creating column with data:", columnData);
+                    const newCol = createColumn(columnData.title, columnData.notes);
                     container.appendChild(newCol);
                 });
             } else {
