@@ -10,6 +10,8 @@ class GridEditor {
         this.initialX = 0;
         this.initialWidth = 0;
         this.columnConfig = {};
+        this.ghostElement = null;
+        this.dragOffset = { x: 0, y: 0 };
 
         this.setupEventListeners();
         this.loadConfiguration();
@@ -67,6 +69,25 @@ class GridEditor {
         this.currentColumn = column;
         this.initialX = e.clientX;
         column.classList.add('dragging');
+        
+        // Create ghost element
+        this.ghostElement = column.cloneNode(true);
+        this.ghostElement.classList.add('ghost-column');
+        this.ghostElement.style.width = `${column.offsetWidth}px`;
+        this.ghostElement.style.height = `${column.offsetHeight}px`;
+        
+        // Calculate offset from mouse to column edge
+        const columnRect = column.getBoundingClientRect();
+        this.dragOffset = {
+            x: e.clientX - columnRect.left,
+            y: e.clientY - columnRect.top
+        };
+        
+        // Position ghost element
+        this.ghostElement.style.left = `${e.pageX - this.dragOffset.x}px`;
+        this.ghostElement.style.top = `${e.pageY - this.dragOffset.y}px`;
+        
+        document.body.appendChild(this.ghostElement);
     }
 
     startResizing(e, column) {
@@ -79,6 +100,12 @@ class GridEditor {
 
     handleDrag(e) {
         if (!this.isDragging) return;
+        
+        // Update ghost element position
+        if (this.ghostElement) {
+            this.ghostElement.style.left = `${e.pageX - this.dragOffset.x}px`;
+            this.ghostElement.style.top = `${e.pageY - this.dragOffset.y}px`;
+        }
 
         this.numberOfColumns = this.container.children.length;
         const deltaX = e.clientX - this.initialX;
@@ -118,6 +145,13 @@ class GridEditor {
         if (this.currentColumn) {
             this.currentColumn.classList.remove('dragging', 'resizing');
         }
+        
+        // Remove ghost element
+        if (this.ghostElement) {
+            this.ghostElement.remove();
+            this.ghostElement = null;
+        }
+        
         this.isDragging = false;
         this.isResizing = false;
         this.currentColumn = null;
