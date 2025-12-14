@@ -1,21 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>3-Column Layout</title>
-        <link href="./reset.css" rel="stylesheet">
-        <link href="./colors.css" rel="stylesheet">
-        <link href="./main.css" rel="stylesheet">
-        <script src="./index.js" defer></script>
-        <script src="./grid-editor.js" defer></script>
-    </head>
-    <body>
-        <main>
-            <div class="container">
-            </div>
-            <button id="add-column-button" title="Add new column">+ New Column</button>
-            <button id="edit-mode-button" title="Edit Mode">Edit Layout</button>
-        </main>
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Column Layout</title>
+    <link href="./reset.css" rel="stylesheet">
+    <link href="./colors.css" rel="stylesheet">
+    <link href="./main.css" rel="stylesheet">
+    <script src="./index.js" defer></script>
+    <script src="./grid-editor.js" defer></script>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+        </div>
+        <dialog id="new-column-dialog">
+            <form method="dialog">
+                <h3>New Column</h3>
+                <input type="text" id="new-column-title" placeholder="Enter column title" autofocus>
+                <div class="actions">
+                    <button value="cancel">Cancel</button>
+                    <button id="confirm-add-column" value="save">Create</button>
+                </div>
+            </form>
+        </dialog>
+        <dialog id="new-note-dialog">
+            <form method="dialog">
+                <h3>New Note</h3>
+                <input type="text" id="new-note-content" placeholder="Enter note content" autofocus>
+                <div class="actions">
+                    <button value="cancel">Cancel</button>
+                    <button id="confirm-add-note" value="save">Add Note</button>
+                </div>
+            </form>
+        </dialog>
+        <button id="add-column-button" title="Add new column">+ New Column</button>
+        <button id="edit-mode-button" title="Edit Mode">Edit Layout</button>
+    </main>
+</body>
+
 </html>

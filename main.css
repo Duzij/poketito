@@ -37,35 +37,36 @@ body main {
 }
 
 .column {
-    &:first-child {
-        margin-right: 0;
-    }
-
-    &:last-child {
-        margin-left: 0;
-    }
+    margin: var(--base-rem);
+    background: white;
+    border: 2px solid var(--color-border);
+    border-radius: calc(var(--base-rem) * 0.5);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+    color: var(--color-text);
+    padding-bottom: var(--base-rem);
 }
 
 .column li {
-    margin-top: var(--base-rem);
-    margin-left: calc(var(--base-rem));
+    margin: 0;
     min-height: calc(2 * var(--base-rem));
-    background: #ff4444;
-
-    &:not(:first-child) {
-        margin-top: 0;
-    }
+    background: transparent;
+    border-bottom: 1px solid #eee;
 
     &:first-child {
         margin-bottom: 0;
-        border-top-left-radius: calc(0.5 * var(--base-rem));
-        border-top-right-radius: calc(0.5 * var(--base-rem));
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        font-weight: bold;
+        font-size: 1.2em;
+        padding: var(--base-rem);
+        border-bottom: 2px solid var(--color-border);
     }
 
     &:last-child {
         margin-top: 0;
-        border-bottom-right-radius: calc(0.5 * var(--base-rem));
-        border-bottom-left-radius: calc(0.5 * var(--base-rem));
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-bottom: none;
     }
 
     div {
@@ -73,7 +74,7 @@ body main {
         justify-content: space-between;
         align-items: center;
         gap: calc(var(--base-rem));
-        padding: calc(0.5 * var(--base-rem));
+        padding: calc(0.5 * var(--base-rem)) var(--base-rem);
     }
 
     .note-content {
@@ -160,4 +161,75 @@ body main {
     pointer-events: none;
     opacity: 0.6;
     z-index: 1001;
+}
+
+dialog {
+    padding: calc(var(--base-rem) * 1.5);
+    border: 2px solid var(--color-border);
+    border-radius: calc(var(--base-rem) * 0.5);
+    background: white;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+    color: var(--color-text);
+}
+
+dialog::backdrop {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+dialog form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-rem);
+    min-width: 300px;
+}
+
+dialog h3 {
+    margin: 0;
+    font-size: calc(var(--base-rem) * 1.2);
+    font-weight: bold;
+}
+
+dialog input {
+    padding: calc(var(--base-rem) * 0.5);
+    font-size: var(--base-rem);
+    border: 2px solid var(--color-border);
+    border-radius: 4px;
+    outline: none;
+}
+
+dialog input:focus {
+    box-shadow: 2px 2px 0px var(--color-border);
+}
+
+dialog .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--base-rem);
+    margin-top: calc(var(--base-rem) * 0.5);
+}
+
+dialog button {
+    padding: calc(var(--base-rem) * 0.5) var(--base-rem);
+    cursor: pointer;
+    font-weight: bold;
+    border: 2px solid var(--color-border);
+    border-radius: 4px;
+    background: white;
+    box-shadow: 2px 2px 0px var(--color-border);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+dialog button:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px var(--color-border);
+}
+
+dialog button[value="save"] {
+    background: var(--color-border);
+    color: white;
+}
+
+dialog button[value="save"]:hover {
+    background: #333;
 }

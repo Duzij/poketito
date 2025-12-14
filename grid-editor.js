@@ -15,12 +15,19 @@ class GridEditor {
         this.ghostElement = null;
         this.dragOffset = { x: 0, y: 0 };
 
-        this.setupEventListeners();
+        // Load configuration first so we have access to existing order numbers
         this.loadConfiguration();
+        this.setupEventListeners();
+
+        // Initialize any existing columns that don't have order numbers
+        // this.initializeColumnOrders();
     }
 
     setupEventListeners() {
         this.editModeToggle.addEventListener('click', () => this.toggleEditMode());
+
+        // Observe the container for new columns
+        this.observeContainer();
 
         // Setup column event listeners when edit mode is enabled
         this.container.addEventListener('mousedown', (e) => {
@@ -89,6 +96,7 @@ class GridEditor {
         this.ghostElement.style.left = `${e.pageX - this.dragOffset.x}px`;
         this.ghostElement.style.top = `${e.pageY - this.dragOffset.y}px`;
 
+        console.log("Starting drag with offset:", this.dragOffset);
         document.body.appendChild(this.ghostElement);
     }
 
@@ -123,6 +131,9 @@ class GridEditor {
                 const referenceNode = newIndex > currentIndex ? columns[newIndex].nextSibling : columns[newIndex];
                 this.container.insertBefore(this.currentColumn, referenceNode);
                 this.initialX = e.clientX;
+
+                // Save configuration immediately to preserve the new order
+                this.saveConfiguration();
             }
         }
     }
@@ -163,39 +174,145 @@ class GridEditor {
         this.currentColumn = null;
     }
 
-    saveConfiguration() {
-        const config = {};
-        const columns = this.container.querySelectorAll('.column');
-
-        columns.forEach((column, index) => {
-            const columnSpan = column.style.gridColumn ?
-                parseInt(column.style.gridColumn.split(' ')[1]) :
-                1;
-
-            config[index] = {
-                order: index,
-                span: columnSpan
-            };
+    observeContainer() {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node instanceof HTMLElement && node.classList.contains('column')) {
+                            if (!node.dataset.columnId || !node.dataset.order) {
+                                this.handleNewColumn(node);
+                            }
+                        }
+                    });
+                }
+            });
         });
 
+        observer.observe(this.container, { childList: true });
+    }
+
+    getNextOrderNumber() {
+        let maxOrder = -1;
+        Object.values(this.columnConfig || {}).forEach(config => {
+            if (config.order > maxOrder) {
+                maxOrder = config.order;
+            }
+        });
+        return maxOrder + 1;
+    }
+
+    saveConfiguration() {
+        // let config = JSON.parse(localStorage.getItem('columnsData'));
+
+        const config = {};
+        const columns = Array.from(this.container.querySelectorAll('.column'));
+
+        for (let index = 0; index < columns.length; index++) {
+            const column = columns[index];
+            const columnId = column.dataset.columnId;
+            column.dataset.columnId = columnId;
+
+            const notes = [];
+            const listItems = column.querySelectorAll('li');
+
+            // Get all notes except the last item (add button)
+            for (let i = 0; i < listItems.length - 1; i++) {
+                const note = listItems[i];
+                notes.push({
+                    content: note.querySelector('p').textContent
+                });
+            }
+
+            const title = notes.length > 0 ? notes[0].content : '';
+            const regularNotes = notes.slice(1);
+
+            config[column.getAttribute('data-column-id')] = {
+                title: title,
+                notes: regularNotes,
+                order: parseInt(column.dataset.order || -1),
+                span: parseInt(column.style.gridColumn.replace('span ', '')) || GridEditor.DEFAULT_COLUMN_SPAN
+            };
+        }
+
         this.columnConfig = config;
-        localStorage.setItem('gridConfiguration', JSON.stringify(config));
+        console.log("saving", config);
+        localStorage.setItem('columnsData', JSON.stringify(config));
+    }
+
+    generateColumnId() {
+        return 'col-' + Math.random().toString(36).substr(2, 9);
+    }
+
+    initializeColumnOrders() {
+        const columns = Array.from(this.container.querySelectorAll('.column'));
+        let nextOrder = this.getNextOrderNumber();
+
+        columns.forEach((column) => {
+            if (!column.dataset.columnId || !column.dataset.order) {
+                // Initialize new column
+                console.log("initializing", column);
+                this.initializeNewColumn(column, nextOrder++);
+            }
+        });
+    }
+
+    initializeNewColumn(column, order = null) {
+        // Generate new ID if not exists
+        if (!column.dataset.columnId) {
+            column.dataset.columnId = this.generateColumnId();
+        }
+
+        // Assign next order number if not provided
+        if (order === null) {
+            order = this.getNextOrderNumber();
+        }
+
+        column.dataset.order = order.toString();
+
+        // Update configuration
+        const columnId = column.dataset.columnId;
+        this.columnConfig[columnId] = {
+            order: order,
+            span: parseInt(column.style.gridColumn?.split(' ')[1]) || GridEditor.DEFAULT_COLUMN_SPAN
+        };
+
+        return column;
+    }
+
+    // Add a method to handle new columns being added to the container
+    handleNewColumn(column) {
+        this.initializeNewColumn(column);
+        this.saveConfiguration();
+        return column;
     }
 
     loadConfiguration() {
-        const savedConfig = localStorage.getItem('gridConfiguration');
-        const columns = this.container.querySelectorAll('.column');
+        const savedConfig = localStorage.getItem('columnsData');
+        const columns = Array.from(this.container.querySelectorAll('.column'));
 
         if (savedConfig) {
             try {
                 this.columnConfig = JSON.parse(savedConfig);
+
+                // First, assign IDs and spans to columns
                 columns.forEach((column, index) => {
-                    if (this.columnConfig[index]) {
-                        const { span } = this.columnConfig[index];
-                        column.style.gridColumn = `span ${span}`;
+                    const columnConfig = this.findColumnConfig(column.dataset.columnId);
+                    if (columnConfig) {
+                        column.style.gridColumn = `span ${columnConfig.span}`;
                     } else {
-                        column.style.gridColumn = 'span ' + GridEditor.DEFAULT_COLUMN_SPAN.toString(); // Default span
+                        column.style.gridColumn = `span ${GridEditor.DEFAULT_COLUMN_SPAN}`;
                     }
+                });
+
+                // Then reorder columns based on saved order
+                columns.sort((col) => {
+                    const columnId = col.dataset.columnId;
+                    const config = this.findColumnConfig(columnId);
+                    return config ? config.order : 999999; // Put columns without config at the end
+                }).forEach(col => {
+                    console.log("Appending column during load:", col);
+                    this.container.appendChild(col);
                 });
             } catch (error) {
                 console.error('Error loading grid configuration:', error);
@@ -204,6 +321,10 @@ class GridEditor {
         } else {
             this.setDefaultColumnSpans(columns);
         }
+    }
+
+    findColumnConfig(columnId) {
+        return this.columnConfig[columnId];
     }
 
     setDefaultColumnSpans(columns) {
